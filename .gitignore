@@ -1,0 +1,16 @@
+# Python virtual environment
+venv/
+
+# Byte-compiled / cache
+__pycache__/
+*.pyc
+
+# VS Code settings (optional, if you're using a shared repo)
+.vscode/
+
+# Environment files (if any)
+.env
+
+# OS-specific
+.DS_Store
+Thumbs.db
