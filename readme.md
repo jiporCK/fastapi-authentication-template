@@ -33,7 +33,7 @@ A simple authentication system using FastAPI, SQLAlchemy, JWT, and OTP.
 ## 🛠️ Setup
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/jiporCK/fastapi-authentication-template.git
 cd project
 pip install -r requirements.txt
 uvicorn main:app --reload
