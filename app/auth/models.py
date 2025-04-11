@@ -10,6 +10,8 @@ class User(Base):
     email = Column(String, nullable=False, unique=True)
     hashed_password = Column(String)
     is_verified = Column(Boolean, default=False)
+    
+    role = Column(String, default="user")
 
     otps = relationship("Otp", back_populates="user", cascade="all, delete-orphan")
 

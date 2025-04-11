@@ -34,30 +34,31 @@ async def validation_exception_handler(request, exc):
         content={"detail": exc.errors(), "body": exc.body}
     )
 
-# @app.on_event("startup")
-# async def startup_event():
-#     try:
-#         # Create tables
-#         Base.metadata.create_all(bind=engine)
-#         db = SessionLocal()
-#         # Insert initial user if not exists
-#         if not db.query(User).filter(User.email == "srengchipor99@gmail.com").first():
-#             new_user = User(
-#                 email="srengchipor99@gmail.com",
-#                 hashed_password=pwd_context.hash("Jipor@999"),
-#                 otp=None
-#             )
-#             db.add(new_user)
-#             db.commit()
-#             print("Initial user created successfully.")
-#         else:
-#             print("Initial user already exists, skipping creation.")
-#     except SQLAlchemyError as e:
-#         db.rollback()
-#         print(f"Database error during startup: {e}")
-#         raise
-#     finally:
-#         db.close()
+@app.on_event("startup")
+async def startup_event():
+    try:
+        # Create tables
+        Base.metadata.create_all(bind=engine)
+        db = SessionLocal()
+        # Insert initial user if not exists
+        if not db.query(User).filter(User.email == "srengchipor99@gmail.com").first():
+            new_user = User(
+                email="srengchipor99@gmail.com",
+                hashed_password=pwd_context.hash("Jipor@999"),
+                role="admin"
+            )
+            db.add(new_user)
+            db.commit()
+            print("Initial user created successfully.")
+        else:
+            print("Initial user already exists, skipping creation.")
+    except SQLAlchemyError as e:
+        db.rollback()
+        print(f"Database error during startup: {e}")
+        raise
+    finally:
+        db.close()
+
 
 app.include_router(auth_router, prefix="/auth", dependencies=[Depends(get_db)])
 app.include_router(user_router, dependencies=[Depends(get_db)])

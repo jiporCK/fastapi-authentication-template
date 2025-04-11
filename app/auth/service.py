@@ -1,13 +1,44 @@
 from sqlalchemy.orm import Session
+from fastapi.security import OAuth2PasswordBearer
+from fastapi import APIRouter, Depends, HTTPException, status
 from app.utils.emailer import send_otp_email
 from app.auth.models import User, Otp
 from app.auth.security import create_token
 from datetime import timedelta, timezone, datetime
 from fastapi import HTTPException
 from passlib.context import CryptContext
+from app.auth.security import decode_token
+from app.db.database import SessionLocal, get_db
 import random
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
+
+def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db)
+) -> User:
+    payload = decode_token(token)
+    if not payload:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    user_id = payload.get("user_id")
+    user = db.query(User).get(user_id)
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return user
+
+def require_admin(current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return current_user
 
 def register_user(email: str, password: str, db: Session):
     """
