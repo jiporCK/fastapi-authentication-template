@@ -1,16 +1,46 @@
 # Python virtual environment
 venv/
+ENV/
+env/
 
 # Byte-compiled / cache
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 
-# VS Code settings (optional, if you're using a shared repo)
+# VS Code settings
 .vscode/
 
-# Environment files (if any)
+# Environment files
 .env
+*.env
 
-# OS-specific
+# Docker Compose env file (if used)
+compose/.env
+
+# OS-specific files
 .DS_Store
 Thumbs.db
+
+# Pytest cache
+.pytest_cache/
+
+# MyPy and Pylint cache
+.mypy_cache/
+.pylint.d/
+
+# Coverage reports
+htmlcov/
+coverage.xml
+*.cover
+.cache/
+
+# Logs
+*.log
+
+# SQLite (if used)
+*.sqlite3
+*.db
+
+# Local testing
+local_settings.py

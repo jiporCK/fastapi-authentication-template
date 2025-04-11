@@ -2,18 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from app.db.database import SessionLocal, get_db
-from app.auth.schemas import LoginRequest, OTPVerifyRequest, TokenResponse, RegisterRequest
-from app.auth.service import register_user, verify_otp_and_create_user, login_user
+from app.auth.schemas import LoginRequest, OTPVerifyRequest, TokenResponse, RegisterRequest, ForgotPasswordAndResendOtpRequest, ResetPasswordRequest
+from app.auth.service import register_user, verify_otp_and_create_user, login_user, forgot_password, reset_password, resend_otp
 from app.auth.security import decode_token
 
 router = APIRouter()
-
-# def get_db():
-#     db = SessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
@@ -37,6 +30,24 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
     Authenticate user and issue access and refresh tokens.
     """
     return login_user(payload.email, payload.password, db)
+
+@router.post("/resend")
+def resend_otp(payload: ForgotPasswordAndResendOtpRequest, db: Session = Depends(get_db)):
+    return resend_otp(payload.email, db)
+
+@router.post("/forgot-password")
+def forgot_password_user(payload: ForgotPasswordAndResendOtpRequest, db: Session = Depends(get_db)):
+    return forgot_password(payload.email, db)
+
+@router.post("/reset-password")
+def reset_password_user(payload: ResetPasswordRequest, db: Session = Depends(get_db)):
+    return reset_password(
+        payload.email, 
+        payload.otp, 
+        payload.new_password,
+        payload.confirm_new_password,
+        db
+        )
 
 @router.get("/protected")
 def protected_route(token: str = Depends(oauth2_scheme)):

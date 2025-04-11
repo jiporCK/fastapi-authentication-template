@@ -1,10 +1,14 @@
 import smtplib
 from email.message import EmailMessage
+import os
+from dotenv import load_dotenv
 
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
-SMTP_USER = "srengchipor99@gmail.com"
-SMTP_PASS = "hmql rlom khrg hybz"  # App Password (not your login!)
+load_dotenv()
+
+SMTP_SERVER = os.getenv("SMTP_SERVER")
+SMTP_PORT = int(os.getenv("SMTP_PORT", 587))  # 587 is a common default
+SMTP_USER = os.getenv("SMTP_USER")
+SMTP_PASS = os.getenv("SMTP_PASS") # App Password (not your login!)
 
 def send_otp_email(to_email: str, otp: str):
     msg = EmailMessage()
