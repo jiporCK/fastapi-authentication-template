@@ -43,8 +43,8 @@ A secure authentication system built with **FastAPI**, **SQLAlchemy**, and **JWT
 
 ```bash
 # 1. Clone the repository
-git clone <your-repo-url>
-cd <project-folder>
+git clone https://github.com/jiporCK/fastapi-authentication-template.git
+cd fastapi-authentication-template
 
 # 2. Create a virtual environment
 python -m venv venv
