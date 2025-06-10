@@ -7,3 +7,8 @@ vmpy:
 run:
     # source venv/bin/activate
     uvicorn app.main:app --reload
+
+push:
+    git add .
+    git commit -m "default commit"
+    git push

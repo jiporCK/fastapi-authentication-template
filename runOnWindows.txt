@@ -1,0 +1,10 @@
+(Command Prompt)
+python -m venv venv
+venv\Scripts\activate
+uvicorn app.main:app --reload
+
+(PowerShell)
+python -m venv venv
+.\venv\bin\Activate.ps1
+uvicorn app.main:app --reload
+
